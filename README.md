@@ -137,7 +137,7 @@ A `String` value is parsed with the `convert` method.
 
 Most modern time format strings are recognized: ISO8601, RFD2822, HTTPDate,
 XMLSchema, and even some natural date and time formats.  Many systems use an
-[ISO8601](https://en.wikipedia.org/wiki/ISO_8601) string, which has date, time, 
+[ISO8601](https://en.wikipedia.org/wiki/ISO_8601) string, which has date, time,
 and timezone components, with each variant having some variations.
 
 With `EasyTime`, you don't have to know which time string format to use,
@@ -178,6 +178,18 @@ or
 
     EasyTime.between?(t1, time_range)   # => true if t1 is within the time_range
 
+### Easy Time Arithmetic
+
+These class methods make it easy to do arithmetic on time values and strings.
+
+    EasyTime.add(time1, duration)     # => new EasyTime value
+
+    EasyTime.subtract(time1, time2)   # => duration
+
+    EasyTime.subtract(time, duration) # => new EasyTime value
+
+In the above examples, `time1` can be any of the usual Date and Time classes,
+including a time string value.
 
 ### Configuring the Comparison Tolerance
 
@@ -230,12 +242,12 @@ Arithmetic operators with auto-conversion are also supported:
     t1 - t2
     t1 - duration
 
-The `t2` can be a date, time or even a time string.  In which case, the are
+The `t2` value can be a date, time or even a time string.  In which case, it is
 converted to a `Time` value, and the subtraction is performed between two
-dates, with a duration result.  
+times, with a duration result.
 
 When arithmetic is performed with a `duration` value, then the result is a new
-updated `EasyTime` value
+updated `EasyTime` value.
 
 ### Auto-Conversion Of Comparison Values
 
@@ -280,13 +292,35 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `rake spec` to run the tests. You can also run `bin/console` for an interactive
 prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
-`bundle exec rake release`, which will create a git tag for the version, push
-git commits and tags, and push the `.gem` file to
-[rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. 
+
+## Testing
+
+There is a complete set of tests in the `spec` directory.  To run all the tests:
+
+    bundle exec rake spec
+
+To run all the tests, with `simplecov` code coverage analysis:
+
+    bundle exec rake spec:coverage
+
+Then, to review the code coverage:
+
+    open coverage/index.html
+
+## Additional Documentation
+
+The `easy_time` gem has been developed using `yard` markdown, so it is fairly
+simple to review the gem API documentation:
+
+    bundle exec yard
+    open doc/index.html
 
 ## Contributing
+
+If you wish to contribute, please fork the repo, create a new branch for your suggested
+improvement, and create a pull request based off of your forked repo branch.  Please do
+not make changes in the version.
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/aks/easy_time.
 

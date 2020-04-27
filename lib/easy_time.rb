@@ -23,25 +23,36 @@ require 'easy_time/convert'
 # `RFC2822`, `HTTPDate`, `XMLSchema`, and `ISO8601` strings and provides
 # comparisons that have an adjustable tolerance.  With `EasyTime` methods, you
 # can reliably compare two timestamps and determine which one is "newer", "older"
-# or the "same" withing a configurable tolerance.  The default comparison
-# tolerance is 1.minute.
+# or the "same" withing a configurable tolerance.
 #
-# In other words, if you have a time-stamp from an `ActiveRecord` object that is
-# a few seconds different from a related object obtained from a 3rd-party system,
-# (eg: AWS S3), then logically, from an application perspective, these two
-# objects could be considered having the "same" time-stamp.
+# The default comparison tolerance is 1 second.  This means that if a local
+# object is created at time t1 and then transferred across the network and used
+# to create a corresponding object in a 3rd-party system, eg: AWS S3, at time
+# t2, then if `(t1 - t2).abs` is < 1.second the two times would be logicall the
+# same.
+#
+# In other words, if you have a time-stamp from an `ActiveRecord` object that
+# is a few milliseconds different from a related object obtained from a
+# 3rd-party system, (eg: AWS S3), then logically, from an application
+# perspective, these two objects could be considered having the "same"
+# time-stamp.
 #
 # This is quite useful when one is trying to keep state synchronized between
 # different systems.  How does one know if an object is "newer" or "older" than
-# that from another system?  If the system time from the connected systems varies
-# by a few or more seconds, then comparisons needs to have some tolerance.
+# that from another system?  If the system time from the connected systems
+# varies by a few or more seconds, then comparisons needs to have some
+# tolerance.
 #
 # Having a tolerant comparison makes "newness" and "oldness" checks easier to
 # manage across systems with possibly varying time sources.
 #
+# However, it is also important to keep the tolerance as small as possible in
+# order to avoid causing more problems, such as false equivalences when objects
+# really were created at different moments in time.
+#
 # `EasyTime` objects are just like Time objects, except:
 #
-# - they auto-convert most date and time objects to Time objects
+# - they auto-convert most time objects, including strings, to Time objects
 # - they provide configurable tolerant comparisons between two time objects
 #
 # Even if you decide to set the configurable comparison tolerance to zero
@@ -56,7 +67,7 @@ require 'easy_time/convert'
 #
 # The conversion to an `EasyTime` can also be provided with a tolerance value:
 #
-#     time.easy_time(tolerance: 5.seconds)
+#     time.easy_time(tolerance: 2.seconds)
 #
 # These are the currently known date and time classes the values of which will
 # be automatically converted to an `EasyTime` value with tolerant comparisons:
@@ -85,7 +96,7 @@ class EasyTime
   #
   #   EasyTime.comparison_tolerance = 0
 
-  DEFAULT_TIME_COMPARISON_TOLERANCE = 1.minute
+  DEFAULT_TIME_COMPARISON_TOLERANCE = 1.second
 
   class << self
     # @example These comparison methods observe the comparison tolerance
@@ -158,6 +169,27 @@ class EasyTime
 
     def compare(time1, time2, tolerance: nil)
       new(time1, tolerance: tolerance) <=> time2
+    end
+
+    # These methods make it easy to add or subtract dates and durations
+    #     EasyTime.add(time, duration, tolerance: nil)
+    #     EasyTime.subtract(time, time_or_duration, tolerance: nil)
+
+    # @param time [Time,DateTime,ActiveSupport::TimeWithZone,Date,String,Integer,Array<Integer>] a time value
+    # @param duration [ActiveSupport::Duration,Integer,Float] a duration value
+    # @return [EasyTime] the `time` with the `duration` added
+
+    def add(time, duration)
+      EasyTime.new(time) + duration
+    end
+
+    # @param time [Time,DateTime,ActiveSupport::TimeWithZone,Date,String,Integer,Array<Integer>] a time value
+    # @param time_or_duration [Time,DateTime,ActiveSupport::Duration,Integer,Float] a time or duration value
+    # @return [EasyTime,Duration] an `EasyTime` value, when a duration is subtracted from a time, or
+    #         a duration _(Integer)_ value, when one time is subtracted from another time.
+
+    def subtract(time, time_or_duration)
+      EasyTime.new(time) - time_or_duration
     end
 
     attr_writer :comparison_tolerance
@@ -287,7 +319,7 @@ class EasyTime
 
   def <=>(other)
     diff = self - other  # note: this has a side-effect of setting @other_time
-    if diff && diff.abs.to_i <= comparison_tolerance.to_i
+    if diff && diff.to_i.abs <= comparison_tolerance.to_i
       0
     elsif diff
       time <=> other_time

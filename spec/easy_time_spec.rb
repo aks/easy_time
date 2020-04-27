@@ -40,8 +40,9 @@ RSpec.describe EasyTime do
         context "..with time1 as #{time1}" do
           let(:test_time1) { time1 }
 
-            context "with time2 as #{time2}" do
-            subject { EasyTime.send(method, test_time1, test_time2) }
+          context "with time2 as #{time2}" do
+            subject { EasyTime.send(method, test_time1, test_time2, tolerance: 1.minute) }
+
             let(:test_time2) { time2 }
             let(:expected_result) do
               case method
@@ -86,7 +87,7 @@ RSpec.describe EasyTime do
             it { is_expected.to eq result }
 
             context "with a second RFC2822 time string as '#{rfc2822_str2}'" do
-              subject { EasyTime.compare(test_time1_str, test_time2_str) }
+              subject { EasyTime.compare(test_time1_str, test_time2_str, tolerance: 1.minute) }
               it { is_expected.to eq compare }
             end
           end
@@ -223,7 +224,73 @@ RSpec.describe EasyTime do
     it_behaves_like 'parse', :natural,   "26-April-2020 12:49:00 CDT"
   end
 
-  describe "#missing_method" do
+  describe '.add' do
+    subject { EasyTime.add(time, duration) }
+    let(:time) { '2010-09-08 07:06:05 -04:00' }
+
+    shared_examples_for 'add' do |duration|
+      context "with a duration of #{duration}" do
+        let(:new_time) { Time.parse(time) + duration }
+        let(:duration) { duration }
+        it { is_expected.to be_an(EasyTime) }
+        it { is_expected.to eq new_time }
+      end
+    end
+
+    it_behaves_like 'add',  2.days
+    it_behaves_like 'add', -3.days
+    it_behaves_like 'add',  2.weeks
+    it_behaves_like 'add', -2.weeks
+    it_behaves_like 'add',  1.week + 2.days + 3.hours + 4.seconds
+    it_behaves_like 'add', -1.week - 2.days - 3.hours - 4.seconds
+  end
+
+  describe '.subtract' do
+    let(:time) { '2010-09-08 07:06:05 -04:00' }
+
+    shared_examples_for 'subtract' do |kind, time_or_duration|
+      case kind
+      when :duration
+        context "with a duration of #{time_or_duration}" do
+          subject { EasyTime.subtract(time, duration) }
+
+          let(:duration) { time_or_duration }
+          let(:new_time) { Time.parse(time) - duration }
+
+          it { is_expected.to be_an(EasyTime) }
+          it { is_expected.to eq new_time }
+        end
+      when :time
+        context "with a time2 of #{time_or_duration}" do
+          subject { EasyTime.subtract(time, time2) }
+
+          let(:time2)    { time_or_duration }
+          let(:duration) { Time.parse(time) - Time.parse(time2) }
+
+          it { is_expected.to be_a(Numeric) }
+          it { is_expected.to eq duration }
+        end
+      end
+    end
+
+    it_behaves_like 'subtract', :duration,  2.days
+    it_behaves_like 'subtract', :duration, -3.days
+    it_behaves_like 'subtract', :duration,  2.weeks
+    it_behaves_like 'subtract', :duration, -2.weeks
+    it_behaves_like 'subtract', :duration,  1.week + 2.days + 3.hours + 4.seconds
+    it_behaves_like 'subtract', :duration, -1.week - 2.days - 3.hours - 4.seconds
+
+    it_behaves_like 'subtract', :time, '2010-09-08 07:06:05 -04:00'
+    it_behaves_like 'subtract', :time, '2010-09-08 07:06:05 -02:00'
+    it_behaves_like 'subtract', :time, '2010-09-08 07:06:05 -01:00'
+    it_behaves_like 'subtract', :time, '2010-09-08 07:05:05 -01:00'
+    it_behaves_like 'subtract', :time, '2010-09-08 06:05:05 -01:00'
+    it_behaves_like 'subtract', :time, '2010-09-07 06:05:05 -01:00'
+    it_behaves_like 'subtract', :time, '2010-07-07 06:05:05 -01:00'
+    it_behaves_like 'subtract', :time, '2009-07-07 06:05:05 -01:00'
+  end
+
+  describe ".missing_method" do
     context 'using known Time class methods' do
       context 'using iso8601' do
         subject { EasyTime.iso8601(time_string) }
@@ -344,18 +411,18 @@ RSpec.describe EasyTime do
     describe '#<=>' do
       EASY_TIME_DATA.each do |time1, time2, result|
         context "with time1 #{time1} and EasyTime" do
-          subject { EasyTime.new(time1) <=> EasyTime.new(time2) }
+          subject { EasyTime.new(time1, tolerance: 1.minute) <=> EasyTime.new(time2) }
           it { is_expected.to eq result }
         end
 
         context 'with auto-conversion of the second argument' do
           context "with time1 #{time1} and string #{time2}" do
-            subject { EasyTime.new(time1) <=> time2 }
+            subject { EasyTime.new(time1, tolerance: 1.minute) <=> time2 }
             it { is_expected.to eq result }
           end
 
           context "with time1 #{time1} and DateTime #{time2}" do
-            subject { EasyTime.new(time1) <=> DateTime.parse(time2) }
+            subject { EasyTime.new(time1, tolerance: 1.minute) <=> DateTime.parse(time2) }
             it { is_expected.to eq result }
           end
         end
@@ -478,7 +545,7 @@ RSpec.describe EasyTime do
       shared_examples_for 'comparison operators' do |convert, time1, time2, result|
         context "with time1 #{time1} and time2 #{time2} #{convert ? ' and conversion' : ''}" do
 
-          let(:eztime1) { EasyTime.new(time1) }
+          let(:eztime1) { EasyTime.new(time1, tolerance: 1.minute) }
           let(:eztime2) { convert ? EasyTime.new(time2) : time2 }
 
           let(:newer) { result >  0 }
