@@ -212,17 +212,17 @@ class EasyTime
       new(parse_string(time_string))
     end
 
-    def method_missing(name, *args, &block)
-      if Time.respond_to?(name)
-        value = Time.send(name, *args, &block)
+    def method_missing(symbol, *args, &block)
+      if Time.respond_to?(symbol)
+        value = Time.send(symbol, *args, &block)
         is_a_time?(value) ? new(value) : value
       else
-        super
+        super(symbol, *args, &block)
       end
     end
 
-    def respond_to_missing?(name, include_all=false)
-      Time.respond_to?(name, include_all)
+    def respond_to_missing?(symbol, include_all=false)
+      Time.respond_to?(symbol, include_all)
     end
 
     # @param value [Anything] value to test as a time-like object
@@ -381,17 +381,17 @@ class EasyTime
   end
 
   # intercept any time methods so they can wrap the time-like result in a new EasyTime object.
-  def method_missing(name, *args, &block)
-    if time.respond_to?(name)
-      value = time.send(name, *args, &block)
+  def method_missing(symbol, *args, &block)
+    if time.respond_to?(symbol)
+      value = time.send(symbol, *args, &block)
       is_a_time?(value) ? dup.tap { |eztime| eztime.time = value } : value
     else
-      super
+      super(symbol, *args, &block)
     end
   end
 
-  def respond_to_missing?(method_name, include_all=false)
-    time.respond_to?(name, include_all)
+  def respond_to_missing?(symbol, include_all=false)
+    time.respond_to?(symbol, include_all)
   end
 
   def is_a_time?(value)
