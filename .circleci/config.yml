@@ -1,0 +1,132 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+defaults: &DEFAULTS
+  resource_class: small
+  docker:
+    - image: circleci/ruby:2.5
+
+      environment:
+        BUNDLE_JOBS: 3
+        BUNDLE_RETRY: 3
+        BUNDLE_PATH: vendor/bundle
+
+  working_directory: ~/repo
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.3-stretch-node
+    executor: ruby/default
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+
+      - restore_cache:
+          keys:
+            - gem-cache-{{ checksum "easy_time.gemspec" }}
+            - gem-cache-
+
+      - run:
+          name: Install bundler
+          command: gem install bundler
+
+      - run:
+          name: Check bundle version
+          command: bundle --version
+
+      - run:
+          name: set the bundle path
+          command: bundle config set path 'vendor/bundle'
+
+      - run:
+          name: install dependencies
+          command: bundle install --jobs=4 --retry=3
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: gem-cache-{{ checksum "easy_time.gemspec" }}
+
+      - run:
+          name: run tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob 'spec/**/*_spec.rb' | circleci tests split --split-by=timings)"
+
+            bundle exec rspec --format RspecJunitFormatter \
+                              --out /tmp/test-results/rspec.xml \
+                              --format progress \
+                              $TEST_FILES
+
+      - store_test_results:
+          path: /tmp/test-results
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+
+      - run:
+          name: build package
+          command: |
+            bundle exec rake clean
+            bundle exec rake build
+
+  release:
+    <<: *DEFAULTS
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/repo
+
+      - restore_cache:
+          keys:
+            - gem-cache-{{ checksum "easy_time.gemspec" }}
+            - gem-cache-
+
+      - run:
+          name: Check bundle version
+          command: bundle --version
+
+      - run:
+          name: Install bundler
+          command: gem install bundler
+
+      - run:
+          name: set the bundle path
+          command: bundle config set path 'vendor/bundle'
+
+      - run:
+          name: install dependencies
+          command: bundle install --jobs=4 --retry=3
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: gem-cache-{{ checksum "easy_time.gemspec" }}
+
+      - run:
+          name: build package
+          command: |
+            bundle exec rake clean
+            bundle exec rake build
+
+      #- deploy:
+      #    name: Release and push
+      #    command: bundle exec gem push
+
+workflows:
+  version: 2
+  bundle_build_test_release:
+    jobs:
+      - build
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
