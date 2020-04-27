@@ -10,35 +10,18 @@ Gem::Specification.new do |spec|
   spec.description   =
     <<~'DESC'
 
-      A class that wraps the `Time` class and makes it easy to work with most
+      A class that wraps the Time class and makes it easy to work with most
       known time values, including various time strings, automatically
-      converting them to `Time` values, and perform tolerant comparisons.
-      All of the expressions below result in `EasyTime` values:
-
-          EasyTime.new(any_time_value)
-          EasyTime.new('2010-10-09T08:07:06-05:00')
-          EasyTime.new(2000,10,9,8,7,6,'-05:00')
-          EasyTime.new(2.weeks.ago)
-          EasyTime.now - 2.days
-          EasyTime.now + 1.month + 2.weeks
-
+      converting them to Time values, and perform tolerant comparisons.
       Several time classes, and the String class, are extended with the
-      `.easy_time` method to perform an auto-conversion:
-
-          date_time_value.easy_time
-          2.weeks.ago.easy_time
-          '2010-10-09 08:07:06 -05:00'.easy_time
-
-      A tolerant comparison allows for times from differing systems to be
-      compared, even when the systems are out of sync, using the relationship
-      operators and methods like `newer?`, `older?`, `same?` and `between?`.
-
-      A tolerant comparison for equality is where the difference of two values
-      is less than the tolerance value _(1 minute by default)_.  The tolerance
-      can be configured, even set to zero.
-
-      Finally, all of the `Time` class and instance methods are available on the
-      `EasyTime` class and instances.
+      ".easy_time" method to perform an auto-conversion.  A tolerant comparison
+      allows for times from differing systems to be compared, even when the
+      systems are out of sync, using the relationship operators and methods
+      like "newer?", "older?", "same?" and "between?".  A tolerant comparison
+      for equality is where the difference of two values is less than the
+      tolerance value (1 minute by default).  The tolerance can be configured,
+      even set to zero.  Finally, all of the Time class and instance methods
+      are available on the EasyTime class and instances.
 
     DESC
   spec.homepage      = 'https://github.com/aks/easy_time'

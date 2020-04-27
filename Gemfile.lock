@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    easy_time (0.1.1)
+    easy_time (0.1.2)
       activesupport
 
 GEM
