@@ -28,7 +28,9 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
 
-  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  # spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/aks"
+  spec.metadata["github_repo"]       = "ssh://github.com/aks/easy_time"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/aks/easy_time"
@@ -43,6 +45,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_development_dependency "activesupport", ">= 6.1.4"
   spec.add_development_dependency "bundler", "~> 2.1.4"
   spec.add_development_dependency "fuubar", ">= 2.5.0"
   spec.add_development_dependency "guard"

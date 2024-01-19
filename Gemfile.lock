@@ -1,23 +1,23 @@
 PATH
   remote: .
   specs:
-    easy_time (0.2.1)
+    easy_time (0.2.2)
       activesupport
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (6.0.2.2)
+    activesupport (6.1.4.7)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-      zeitwerk (~> 2.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     ast (2.4.0)
     builder (3.2.4)
     byebug (11.1.3)
     coderay (1.1.2)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.10)
     diff-lcs (1.3)
     docile (1.3.2)
     ffi (1.12.2)
@@ -42,7 +42,7 @@ GEM
     guard-yard (2.2.1)
       guard (>= 1.1.0)
       yard (>= 0.7.0)
-    i18n (1.8.2)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
     listen (3.2.1)
@@ -50,7 +50,7 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.10)
     lumberjack (1.2.4)
     method_source (1.0.0)
-    minitest (5.14.0)
+    minitest (5.15.0)
     nenv (0.3.0)
     notiffany (0.1.3)
       nenv (~> 0.1)
@@ -105,17 +105,17 @@ GEM
     simplecov-html (0.12.2)
     terminal-notifier-guard (1.7.0)
     thor (1.0.1)
-    thread_safe (0.3.6)
-    tzinfo (1.2.7)
-      thread_safe (~> 0.1)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
     unicode-display_width (1.7.0)
     yard (0.9.24)
-    zeitwerk (2.3.0)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (>= 6.1.4)
   bundler (~> 2.1.4)
   easy_time!
   fuubar (>= 2.5.0)
