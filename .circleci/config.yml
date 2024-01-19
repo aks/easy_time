@@ -1,11 +1,11 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2
+  ruby: circleci/ruby@2.1.0
 
 defaults: &DEFAULTS
   resource_class: small
   docker:
-    - image: circleci/ruby:2.5
+    - image: cimg/ruby:2.7.7
 
       environment:
         BUNDLE_JOBS: 3
@@ -17,7 +17,7 @@ defaults: &DEFAULTS
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6.3-stretch-node
+      - image: cimg/ruby:2.7.7
     executor: ruby/default
     steps:
       - checkout
@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: Install bundler
-          command: gem install bundler
+          command: gem install bundler -v 2.4.22
 
       - run:
           name: Check bundle version
@@ -93,7 +93,7 @@ jobs:
 
       - run:
           name: Install bundler
-          command: gem install bundler
+          command: gem install bundler -v 2.4.22
 
       - run:
           name: set the bundle path
@@ -114,9 +114,9 @@ jobs:
             bundle exec rake clean
             bundle exec rake build
 
-      #- deploy:
-      #    name: Release and push
-      #    command: bundle exec gem push
+      - deploy:
+          name: Release and push
+          command: bundle exec rake release
 
 workflows:
   version: 2
@@ -129,4 +129,3 @@ workflows:
           filters:
             branches:
               only: master
-

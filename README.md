@@ -15,10 +15,10 @@ Well, then, give EasyTime a try!
 
 `EasyTime` accepts most of the well-known date and time objects, including
 `RFC2822`, `HTTPDate`, `XMLSchema`, `ISO8601`, as well as
-ActiveSupport::TimeWithZone strings and provides comparisons that have an
+`ActiveSupport::TimeWithZone` strings and provides comparisons that have an
 adjustable tolerance.  With `EasyTime` methods, you can reliably compare two
 timestamps and determine which one is "newer", "older" or the "same" withing
-a configurable tolerance.  The default comparison tolerance is 1.minute.
+a configurable tolerance.  The default comparison tolerance is `1.minute`.
 
 In other words, if you have a time-stamp from an `ActiveRecord` object that is
 a few seconds different from a related object obtained from a 3rd-party system,
@@ -135,8 +135,8 @@ A `String` value is parsed with the `convert` method.
 
 #### Time Strings
 
-Most modern time format strings are recognized: ISO8601, RFD2822, HTTPDate,
-XMLSchema, and even some natural date and time formats.  Many systems use an
+Most modern time format strings are recognized: `ISO8601`, `RFD2822`, `HTTPDate`,
+`XMLSchema`, and even some natural date and time formats.  Many systems use an
 [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) string, which has date, time,
 and timezone components, with each variant having some variations.
 
@@ -204,9 +204,9 @@ applied across all instances of the class.
 
 ### EasyTime Instance Methods
 
-Once a `EasyTime` value has been created, it is basically a wrapped `Time` value
-where the comparison methods are overridden in order to apply the comparison
-tolerance value.
+Once an `EasyTime` value has been created, it is basically a wrapped `Time` 
+value where the comparison methods are overridden in order to apply the 
+comparison tolerance value.
 
 These are the instance methods:
 
@@ -318,9 +318,9 @@ simple to review the gem API documentation:
 
 ## Contributing
 
-If you wish to contribute, please fork the repo, create a new branch for your suggested
-improvement, and create a pull request based off of your forked repo branch.  Please do
-not make changes in the version.
+If you wish to contribute, please fork the repo, create a new branch for your
+suggested improvement, and create a pull request based off of your forked repo 
+branch. Please do not make changes in the version.
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/aks/easy_time.
 

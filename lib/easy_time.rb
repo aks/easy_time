@@ -246,7 +246,7 @@ class EasyTime
   delegate :to_s, :inspect, to: :time
 
   def initialize(*time, tolerance: nil)
-    @time = time.presence && convert(time.size == 1 ? time.first : time)
+    @time = time.size.nonzero? && convert(time.size == 1 ? time.first : time)
     @comparison_tolerance = tolerance
   end
 
