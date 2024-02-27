@@ -1,5 +1,16 @@
 # Change Log for EasyTime
 
+## [1.0.0] - 2024-02-26
+
+### Changed
+
+Changed `convert` to use a named `coerce:` keyword parameter.
+Updated and modernized the specs.
+Rubocop complaints satisfied.
+Bypassed '/specs/' for SimplCov
+
+###
+
 ## [0.2.2] - 2024-01-18
 
 ### Added

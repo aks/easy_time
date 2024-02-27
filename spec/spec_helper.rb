@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
 
-BEGIN {
+if %w[true yes on 1].include?(ENV['CODE_COVERAGE'])
   require 'simplecov'
-  SimpleCov.start if %w[true yes on 1].include?(ENV['CODE_COVERAGE'])
-}
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

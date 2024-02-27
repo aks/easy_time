@@ -138,7 +138,6 @@ class EasyTime
       compare(time1, time2, tolerance: tolerance).zero?
     end
 
-
     # @overload between?(time1, t_min, t_max, tolerance: nil)
     #   @param time1 [Date,Time,DateTime,EasyTime,Duration,String,Array<Integer>] a time value
     #   @param t_min [Date,Time,DateTime,EasyTime,Duration,String,Array<Integer>] the minimum time
@@ -150,7 +149,7 @@ class EasyTime
     #   @param time_range [Range] a range `(t_min..t_max)` of time values
     #   @return [Boolean] true if `time_range.min <= time1 <= time_range.max`, using tolerant comparisons
 
-    def between?(time1, t_arg, t_max=nil, tolerance: nil)
+    def between?(time1, t_arg, t_max = nil, tolerance: nil)
       if t_arg.is_a?(Range)
         t_min = t_arg.min
         t_max = t_arg.max
@@ -221,13 +220,13 @@ class EasyTime
       end
     end
 
-    def respond_to_missing?(symbol, include_all=false)
+    def respond_to_missing?(symbol, include_all = false)
       Time.respond_to?(symbol, include_all)
     end
 
     # @param value [Anything] value to test as a time-like object
     # @return [Boolean] true if value is one the known Time classes, or responds to :acts_like_time?
-    def is_a_time?(value)
+    def a_time?(value)
       case value
       when Integer, ActiveSupport::Duration
         false
@@ -237,6 +236,7 @@ class EasyTime
         value.respond_to?(:acts_like_time?) && value.acts_like_time?
       end
     end
+    alias is_a_time? a_time?
   end
 
   attr_accessor :time
@@ -318,7 +318,7 @@ class EasyTime
   # @return [Integer] one of [-1, 0, 1] or nil
 
   def <=>(other)
-    diff = self - other  # note: this has a side-effect of setting @other_time
+    diff = self - other  # NOTE: this has a side-effect of setting @other_time
     if diff && diff.to_i.abs <= comparison_tolerance.to_i
       0
     elsif diff
@@ -362,7 +362,7 @@ class EasyTime
   #        a date/time value, a duration, or an Integer
   # @return [EasyTime,Integer] updated time _(time - duration)_ or duration _(time - time)_
   def -(other)
-    @other_time = convert(other, false)
+    @other_time = convert(other, coerce: false)
     if is_a_time?(other_time)
       time - other_time
     elsif other_time
@@ -376,8 +376,8 @@ class EasyTime
 
   private
 
-  def convert(datetime, coerce = true)
-    self.class.convert(datetime, coerce)
+  def convert(datetime, coerce: true)
+    self.class.convert(datetime, coerce: coerce)
   end
 
   # intercept any time methods so they can wrap the time-like result in a new EasyTime object.
@@ -390,13 +390,14 @@ class EasyTime
     end
   end
 
-  def respond_to_missing?(symbol, include_all=false)
+  def respond_to_missing?(symbol, include_all = false)
     time.respond_to?(symbol, include_all)
   end
 
-  def is_a_time?(value)
+  def a_time?(value)
     self.class.is_a_time?(value)
   end
+  alias is_a_time? a_time?
 end
 
 # Extend the known date and time classes _(including EasyTime itself!)_

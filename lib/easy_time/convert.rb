@@ -41,7 +41,7 @@ class EasyTime
     #             various kinds of date and time values
     # @param coerce [Boolean] if true, coerce the `arg` into a Time object _(default: true)_
     # @return [Time]
-    def convert(arg, coerce = true)
+    def convert(arg, coerce: true)
       case arg
       when String
         parse_string(arg)              # parse the string value into an EasyTime object

@@ -18,7 +18,7 @@ RSpec.describe EasyTime do
       ['2019-04-15T09:13:20-00:00',  '2019-04-15T09:14:21-00:00', -1],
       ['2020-04-15T09:13:20-00:00',  '2020-04-15T09:13:24-00:00',  0],
       ['2021-04-15T09:13:20-00:00',  '2021-04-15T09:14:21-00:00', -1]
-    ]
+    ].freeze
 
   TEST_BETWEEN_VALUES = [
     # tmin,                        tmax,                      result
@@ -31,7 +31,7 @@ RSpec.describe EasyTime do
     ['2010-09-08 07:06:05 -04:00', '2010-09-08 11:06:05 GMT', true ], # t_max = 11:06:05 GMT
     ['2010-09-08 07:06:05 -04:00', '2010-09-08 11:06:04 GMT', true ], # t_max = 11:06:04 GMT
     ['2010-09-08 07:06:05 -04:00', '2010-09-08 11:06:03 GMT', false], # t_max = 11:06:03 GMT
-  ]
+  ].freeze
 
   shared_examples_for 'easy time comparisons' do |method|
     describe ".#{method}" do
@@ -117,7 +117,7 @@ RSpec.describe EasyTime do
   end
 
   describe '.convert' do
-    subject { EasyTime.convert(test_arg, coerce_it) }
+    subject { EasyTime.convert(test_arg, coerce: coerce_it) }
 
     let(:coerce_it) { true }
 
@@ -161,7 +161,7 @@ RSpec.describe EasyTime do
       end
 
       context 'without coercion' do
-        let(:test_arg) { (2.weeks).to_i }
+        let(:test_arg) { 2.weeks.to_i }
         let(:coerce_it) { false }
 
         it { is_expected.to be_a(Numeric) }
@@ -176,7 +176,7 @@ RSpec.describe EasyTime do
         it { is_expected.to be_a(Time) }
 
         it 'should be an offset from now' do
-          expect(EasyTime.new(subject)).to eq (EasyTime.now + test_arg)
+          expect(EasyTime.new(subject)).to eq(EasyTime.now + test_arg)
         end
       end
 
@@ -184,7 +184,7 @@ RSpec.describe EasyTime do
         let(:coerce_it) { false }
         let(:test_arg) { 2.weeks }
 
-        it { is_expected.to be_a(ActiveSupport::Duration )}
+        it { is_expected.to be_a(ActiveSupport::Duration) }
         it { is_expected.to eq test_arg }
       end
     end
@@ -381,7 +381,7 @@ RSpec.describe EasyTime do
           end
 
           it "converts the argument to a Time value" do
-            expect(EasyTime).to receive(:convert).with(arg, true).and_call_original
+            expect(EasyTime).to receive(:convert).with(arg, coerce: true).and_call_original
             expect(subject.time).to be_a(Time)
           end
 
@@ -540,11 +540,9 @@ RSpec.describe EasyTime do
       end
     end
 
-
     describe 'comparison methods and operators' do
       shared_examples_for 'comparison operators' do |convert, time1, time2, result|
         context "with time1 #{time1} and time2 #{time2} #{convert ? ' and conversion' : ''}" do
-
           let(:eztime1) { EasyTime.new(time1, tolerance: 1.minute) }
           let(:eztime2) { convert ? EasyTime.new(time2) : time2 }
 
@@ -647,15 +645,24 @@ RSpec.describe EasyTime do
     end
 
     describe 'respond_to_missing?' do
-      subject { EasyTime.respond_to?(test_name) }
+      subject { time.respond_to?(test_name) }
+      let(:time) { EasyTime.now }
 
       context 'with a known Time method' do
-        let(:test_name) { }
+        let(:test_name) { :iso8601 }
+        it 'confirms the method against the Time class' do
+          expect(time).to receive(:respond_to?).with(test_name)
+          subject
+        end
 
+        it { is_expected.to be true }
       end
 
       context 'with an unknown method' do
-
+        let(:test_name) { :no_such_thing }
+        it 'passes the args to super and fails there' do
+          expect(subject).to be false
+        end
       end
     end
 
@@ -677,7 +684,7 @@ RSpec.describe EasyTime do
       end
 
       context 'for DateTime values' do
-        let(:time) { DateTime.new(2010,9,8,7,6,5,"+04:00") }
+        let(:time) { DateTime.new(2010, 9, 8, 7, 6, 5, "+04:00") }
         it { is_expected.to be_an(EasyTime) }
         it { is_expected.to eq Time.iso8601(time.iso8601) }
       end

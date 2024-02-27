@@ -5,6 +5,9 @@ Metrics/AbcSize:
 Metrics/CyclomaticComplexity:
   Enabled: false
 
+Metrics/BlockLength:
+  Enabled: false
+
 Metrics/MethodLength:
   Enabled: false
 
@@ -18,10 +21,17 @@ Metrics/ClassLength:
 Layout/ExtraSpacing:
   Enabled: false
 
+Layout/HashAlignment:
+  Exclude:
+  - 'Guardfile'
+
 Layout/LineLength:
   Enabled: false
 
-Layout/SpacingAroundOperators:
+Layout/SpaceAroundOperators:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: false
 
 # Styles
@@ -35,4 +45,19 @@ Style/StringLiterals:
   Enabled: false
 
 Style/RescueModifier:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+  - 'bin/*'
+
+# Lint
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
+# Naming
+Naming/BinaryOperatorParameterName:
   Enabled: false

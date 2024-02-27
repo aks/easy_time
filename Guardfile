@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Guardfile for easy_time gem
 
 begin
@@ -30,6 +32,6 @@ guard :rspec,
 end
 
 guard 'yard' do
-  watch(%r{lib\/.+\.rb})
+  watch(%r{lib/.+\.rb})
   watch('README.md')
 end
