@@ -17,7 +17,7 @@ namespace :spec do
 end
 
 task default: %i[spec rubocop]
-task install: %i[build spec]
+task install: %i[build spec clean]
 task release: %i[build spec install]
 
 namespace :bundle do
