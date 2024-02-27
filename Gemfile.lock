@@ -136,6 +136,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   activesupport (>= 6.1.4)
