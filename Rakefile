@@ -17,14 +17,13 @@ namespace :spec do
 end
 
 task default: %i[spec rubocop]
-task build:   %i[bundle:add_linux]
-task install: %i[build spec bundle:add_linux]
-task release: %i[build spec install bundle:add_linux]
+task install: %i[build spec]
+task release: %i[build spec install]
 
 namespace :bundle do
   desc 'add linux platform to Gemfile.lock'
   task :add_linux do
-    sh 'bundle lock --add-platform x86_64-linux'
+    sh "grep -s 'x86_64-linux' Gemfile.lock >/dev/null || bundle lock --add-platform x86_64-linux"
   end
 end
 

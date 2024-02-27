@@ -1,6 +1,6 @@
 # Change Log for EasyTime
 
-## [1.0.0] - 2024-02-26
+## [1.0.1] - 2024-02-26
 
 ### Changed
 
@@ -8,6 +8,7 @@ Changed `convert` to use a named `coerce:` keyword parameter.
 Updated and modernized the specs.
 Rubocop complaints satisfied.
 Bypassed '/specs/' for SimplCov
+Changed Rakefile to not automatically run build:install-x86_64
 
 ###
 
