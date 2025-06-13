@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
     DESC
   spec.homepage      = 'https://github.com/aks/easy_time'
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.7")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   # spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/aks"
