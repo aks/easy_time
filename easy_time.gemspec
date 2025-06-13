@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
     DESC
   spec.homepage      = 'https://github.com/aks/easy_time'
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.7")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.3")
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
   # spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/aks"
@@ -48,7 +48,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "activesupport", ">= 6.1.4"
-  spec.add_development_dependency "bundler", "~> 2.1.4"
+  spec.add_development_dependency "bundler", "~> 2.5.22"
   spec.add_development_dependency "fuubar", ">= 2.5.0"
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"

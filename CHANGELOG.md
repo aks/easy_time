@@ -1,5 +1,10 @@
 # Change Log for EasyTime
 
+## ['1.0.2'] - '2025-06-13'
+
+- set default ruby version to 3.3.8
+- added ruby 3.3.8 to the CI test matrix
+
 ## [1.0.1] - 2024-02-26
 
 ### Changed

@@ -5,7 +5,7 @@ orbs:
 defaults: &DEFAULTS
   resource_class: small
   docker:
-    - image: cimg/ruby:2.7.8
+    - image: cimg/ruby:3.3.8
 
       environment:
         BUNDLE_JOBS: 3
@@ -17,7 +17,7 @@ defaults: &DEFAULTS
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.7.8
+      - image: cimg/ruby:3.3.8
     executor: ruby/default
     steps:
       - checkout
@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: Install bundler
-          command: gem install bundler -v 2.4.22
+          command: gem install bundler -v 2.5.22
 
       - run:
           name: Check bundle version
@@ -93,7 +93,7 @@ jobs:
 
       - run:
           name: Install bundler
-          command: gem install bundler -v 2.4.22
+          command: gem install bundler -v 2.5.22
 
       - run:
           name: set the bundle path
@@ -116,7 +116,7 @@ jobs:
 
       - deploy:
           name: Release and push
-          command: bundle exec rake release
+          command: bundle exec rake release --trace
 
 workflows:
   version: 2

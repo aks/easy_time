@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    easy_time (1.0.1)
+    easy_time (1.0.2)
       activesupport
 
 GEM
@@ -140,7 +140,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (>= 6.1.4)
-  bundler (~> 2.1.4)
+  bundler (~> 2.5.22)
   easy_time!
   fuubar (>= 2.5.0)
   guard
@@ -159,4 +159,4 @@ DEPENDENCIES
   yard (>= 0.9.24)
 
 BUNDLED WITH
-   2.1.4
+   2.5.22
