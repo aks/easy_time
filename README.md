@@ -6,6 +6,7 @@
 
 Are you tired of having to deal with many kinds of date and time objects?
 
+
 Are you frustrated that comparing timestamps from different systems yields
 incorrect results?  _(Were you surprised to learn that, despite really good
 time sync sources, many systems aren't actually synced all that closely in
