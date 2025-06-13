@@ -48,7 +48,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "activesupport", ">= 6.1.4"
-  spec.add_development_dependency "bundler", "~> 2.1.4"
+  spec.add_development_dependency "bundler", "~> 2.5.22"
   spec.add_development_dependency "fuubar", ">= 2.5.0"
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
